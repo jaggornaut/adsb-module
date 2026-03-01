@@ -87,9 +87,24 @@ int main(int argc, char* argv[]) {
         adsb::types::GlobalPosition ref_pos = {lat, lon};
 
         jsignal::MQTTPublisher mqtt_publisher(appSettings.mqtt_settings);
-        if (!mqtt_publisher.connect()) {
-            std::cerr << "Error: Could not establish initial connection to MQTT broker. Aborting." << std::endl;
-            return 1;
+        {
+            constexpr int max_retries = 10;
+            constexpr int retry_delay_s = 3;
+            bool connected = false;
+            for (int i = 1; i <= max_retries && !g_shutdown_requested; ++i) {
+                if (mqtt_publisher.connect()) {
+                    connected = true;
+                    break;
+                }
+                std::cerr << "MQTT: Retry " << i << "/" << max_retries
+                          << " in " << retry_delay_s << "s..." << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(retry_delay_s));
+            }
+            if (!connected) {
+                std::cerr << "Error: Could not connect to MQTT broker after "
+                          << max_retries << " attempts. Aborting." << std::endl;
+                return 1;
+            }
         }
 
         jsignal::ADSBProcessor adsb_logic(ref_pos, mqtt_publisher);
