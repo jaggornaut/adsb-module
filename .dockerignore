@@ -1,0 +1,9 @@
+cmake-build-*/
+build/
+.git/
+.idea/
+.vscode/
+config/
+mosquitto/
+*.md
+LICENSE

@@ -1,0 +1,13 @@
+sdr_settings:
+  device_index: 0
+  center_frequency: 1090000000
+  sample_rate: 2000000
+  tuner_gain: 496
+  ref_position:
+    latitude: 0.0
+    longitude: 0.0
+
+mqtt_settings:
+  broker_address: "tcp://127.0.0.1:1883"
+  client_id: "adsb_processor_instance"
+  topic_base: "adsb/aircraft/"
