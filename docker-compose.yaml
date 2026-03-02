@@ -1,30 +1,10 @@
 services:
-  mosquitto:
-    image: eclipse-mosquitto:2
-    volumes:
-      - ./mosquitto/config:/mosquitto/config:ro
-      - mosquitto-data:/mosquitto/data
-    ports:
-      - "1883:1883"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/#' -C 1 -W 1 || exit 1"]
-      interval: 5s
-      timeout: 3s
-      retries: 3
-      start_period: 5s
-
   adsb-module:
     image: ghcr.io/jaggornaut/adsb-module:latest
     build: .
+    network_mode: host
     devices:
       - /dev/bus/usb:/dev/bus/usb
     volumes:
       - ./config:/config:ro
-    depends_on:
-      mosquitto:
-        condition: service_healthy
     restart: unless-stopped
-
-volumes:
-  mosquitto-data:

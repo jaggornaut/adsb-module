@@ -64,20 +64,19 @@ The reference position is used for CPR (Compact Position Reporting) decoding to 
 
 ### Docker Compose
 
-The compose stack includes an MQTT broker (Mosquitto) and the adsb-module. The RTL-SDR dongle must be plugged in before starting.
+The RTL-SDR dongle must be plugged in before starting. An external MQTT broker must be reachable at the address configured in `broker_address`.
 
 #### Quick deploy (pre-built image)
 
 No need to clone the repo. Download the required files and run:
 
 ```bash
-mkdir -p adsb-module/mosquitto/config adsb-module/config && cd adsb-module
+mkdir -p adsb-module/config && cd adsb-module
 curl -LO https://raw.githubusercontent.com/jaggornaut/adsb-module/main/docker-compose.yaml
 curl -LO https://raw.githubusercontent.com/jaggornaut/adsb-module/main/config.example.yaml
-curl -Lo mosquitto/config/mosquitto.conf https://raw.githubusercontent.com/jaggornaut/adsb-module/main/mosquitto/config/mosquitto.conf
 
 cp config.example.yaml config/adsb-module.yaml
-nano config/adsb-module.yaml   # set your coordinates and broker_address to tcp://mosquitto:1883
+nano config/adsb-module.yaml   # set your coordinates and broker_address
 
 docker compose up -d
 ```
@@ -88,12 +87,18 @@ If you cloned the repo:
 
 ```bash
 cp config.example.yaml config/adsb-module.yaml
-nano config/adsb-module.yaml   # set your coordinates and broker_address to tcp://mosquitto:1883
+nano config/adsb-module.yaml   # set your coordinates and broker_address
 
 docker compose up -d --build
 ```
 
-When running with Docker Compose, set `broker_address` to `tcp://mosquitto:1883` since the broker is a container on the same network.
+### Listening to MQTT messages
+
+To test the output published on the MQTT topic, subscribe with `mosquitto_sub`:
+
+```bash
+mosquitto_sub -h 127.0.0.1 -t adsb/aircraft/# -v
+```
 
 Each decoded aircraft is published to `adsb/aircraft/<ICAO>` as JSON:
 
