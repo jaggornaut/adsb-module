@@ -2,7 +2,8 @@
 
 ADS-B receiver and decoder that captures Mode S transponder signals from aircraft using an RTL-SDR dongle, decodes them in real time, and publishes structured JSON data to an MQTT broker.
 
-
+![](docs/images/jsignal-screenshot.gif)
+*Demo of an unreleased frontend*
 
 ## Dependencies
 
