@@ -1,6 +1,4 @@
-FROM --platform=$BUILDPLATFORM debian:bookworm-slim AS builder
-
-ARG TARGETARCH
+FROM debian:bookworm-slim AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
