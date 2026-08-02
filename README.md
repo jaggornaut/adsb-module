@@ -2,8 +2,7 @@
 
 ADS-B receiver and decoder that captures Mode S transponder signals from aircraft using an RTL-SDR dongle, decodes them in real time, and publishes structured JSON data to an MQTT broker.
 
-![](docs/images/jsignal-screenshot.gif)
-*Demo of an unreleased frontend*
+Part of the **[JSignal](https://github.com/jaggornaut/jsignal)** ecosystem: [jsignal-be](https://github.com/jaggornaut/jsignal-be) records the published traffic to PostgreSQL and [jsignal-fe](https://github.com/jaggornaut/jsignal-fe) visualizes it live and as replayable history. This module also works standalone with any MQTT consumer.
 
 ## Dependencies
 
@@ -66,6 +65,8 @@ The reference position is used for CPR (Compact Position Reporting) decoding to 
 ### Docker Compose
 
 The RTL-SDR dongle must be plugged in before starting. An external MQTT broker must be reachable at the address configured in `broker_address`.
+
+The image (multi-arch: amd64/arm64) builds librtlsdr from the [RTL-SDR Blog fork](https://github.com/rtlsdrblog/rtl-sdr-blog), so **RTL-SDR Blog V4** dongles work out of the box and the kernel DVB driver is detached automatically — no host blacklisting needed.
 
 #### Quick deploy (pre-built image)
 

@@ -1,9 +1,9 @@
 services:
   adsb-module:
     image: ghcr.io/jaggornaut/adsb-module:latest
+    container_name: adsb-module
     build: .
     network_mode: host
-    privileged: true
     devices:
       - /dev/bus/usb:/dev/bus/usb
     volumes:

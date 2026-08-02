@@ -19,7 +19,7 @@ namespace jsignal {
 
 static long long get_current_time_ms() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::steady_clock::now().time_since_epoch()).count();
+        std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
 void AircraftState::update_with_message(std::unique_ptr<adsb::message::ADSBMessage> msg) {
