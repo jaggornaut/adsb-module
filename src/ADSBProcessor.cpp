@@ -34,6 +34,7 @@ void AircraftState::update_with_message(std::unique_ptr<adsb::message::ADSBMessa
         m_last_velocity.reset(
             static_cast<adsb::message::VelocityMessage*>(msg.release()));
     } else if (auto* pos_msg = dynamic_cast<adsb::message::AirbornePositionMessage*>(msg.get())) {
+        m_last_altitude_ft = pos_msg->get_altitude();
         if (pos_msg->is_odd_frame()) {
             m_last_pos_odd.reset(
                 static_cast<adsb::message::AirbornePositionMessage*>(msg.release()));
@@ -194,8 +195,8 @@ std::string ADSBProcessor::format_aircraft_data(
         data["heading_deg"]       = format_double(vel->get_heading(), 2);
         data["vertical_rate_fpm"] = vel->get_vertical_rate();
     }
-    if (const auto& pos = aircraft.get_last_position()) {
-        data["altitude_barometric_ft"] = pos->get_altitude();
+    if (const auto& alt = aircraft.get_last_altitude_ft()) {
+        data["altitude_barometric_ft"] = *alt;
     }
     if (pos_result) {
         data["latitude"]     = format_double(pos_result->position.latitude, 5);

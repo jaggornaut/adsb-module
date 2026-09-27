@@ -40,6 +40,10 @@ namespace jsignal {
             return (m_last_pos_odd) ? m_last_pos_odd : m_last_pos_even;
         }
 
+        const std::optional<int>& get_last_altitude_ft() const {
+            return m_last_altitude_ft;
+        }
+
     private:
         bool is_timestamp_valid(const adsb::message::AirbornePositionMessage& msg1,
                                 const adsb::message::AirbornePositionMessage& msg2) const;
@@ -51,6 +55,7 @@ namespace jsignal {
         std::unique_ptr<adsb::message::VelocityMessage> m_last_velocity;
         std::unique_ptr<adsb::message::AirbornePositionMessage> m_last_pos_odd;
         std::unique_ptr<adsb::message::AirbornePositionMessage> m_last_pos_even;
+        std::optional<int> m_last_altitude_ft;
     };
 
 
